@@ -50,7 +50,7 @@ public class AppMongo
 
 
         // https://github.com/apache/bahir/blob/master/streaming-mqtt/examples/src/main/scala/org/apache/spark/examples/streaming/mqtt/MQTTWordCount.scala
-        JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(10000));
+        JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(1000));
 
       /*  Map<String, String> writeOverrides = new HashMap<String, String>();
         writeOverrides.put("collection", "local");*
@@ -59,19 +59,17 @@ public class AppMongo
 
         final JavaReceiverInputDStream<String> stream = MQTTUtils.createStream(
                 jssc,
-                "tcp://bthermalappliance.westeurope.cloudapp.azure.com:1883",
-                "#",
-                StorageLevel.MEMORY_ONLY_2(),
-                "user",
-                "user");
+                "tcp://test.mosquitto.org:1883",
+                "wago/pfc/cloudconnectivity/example/mqttpublishark237",
+                StorageLevel.MEMORY_ONLY_2());
 
 
         JavaDStream<String> map = stream.map(s -> {
             String text = s; // TODO: if jason parsing is needed
-            SentimentResult result = new Sentiment().analyze(text);
-            System.out.println("Sentiment Score: " + result.getSentimentScore());
-            System.out.println("Sentiment Type: " + result.getSentimentType());
-            return Sentiment.getSentiment(result)+";"+text;
+            Sentiment sentiment = new Sentiment(text);
+            /*System.out.println("Sentiment Score: " + result.getSentimentScore());
+            System.out.println("Sentiment Type: " + result.getSentimentType());*/
+            return sentiment.getSentiment()+";"+text;
         });
 
 
@@ -84,6 +82,7 @@ public class AppMongo
                 JavaRDD<SentimentModel> rddModels = stringJavaRDD.map(new MapClass());
                 SQLContext sql = new SQLContext(jssc.sparkContext());
                 Dataset<Row> sentimentDF = sql.createDataFrame(rddModels, SentimentModel.class);
+                sentimentDF.printSchema();
                 sentimentDF.show();
                 MongoSpark.write(sentimentDF).option("collection", "sentiment").mode("append").save();
 

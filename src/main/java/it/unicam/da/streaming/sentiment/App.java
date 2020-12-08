@@ -35,25 +35,23 @@ public class App
 
 
         // https://github.com/apache/bahir/blob/master/streaming-mqtt/examples/src/main/scala/org/apache/spark/examples/streaming/mqtt/MQTTWordCount.scala
-        JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(10000));
+        JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(5000));
         final JavaReceiverInputDStream<String> stream = MQTTUtils.createStream(
                 jssc,
-                "tcp://bthermalappliance.westeurope.cloudapp.azure.com:1883",
+                "tcp://test.mosquitto.org:1883", //"tcp://bthermalappliance.westeurope.cloudapp.azure.com:1883",
                 "#",
-                StorageLevel.MEMORY_ONLY_2(),
+                StorageLevel.MEMORY_ONLY_2()/*,
                 "user",
-                "user");
+                "user"*/
+                );
 
-        JavaPairDStream<String, Integer> js = stream
-                .flatMap(s -> Arrays.asList(s.split(" ")).iterator())
-                .mapToPair(word -> new Tuple2<>(word, 1))
-                .reduceByKey((a, b) -> a + b);
         JavaDStream<String> map = stream.map(s -> {
             String text = s; // TODO: if jason parsing is needed
-            SentimentResult result = new Sentiment().analyze(text);
-            System.out.println("Sentiment Score: " + result.getSentimentScore());
-            System.out.println("Sentiment Type: " + result.getSentimentType());
-            return Sentiment.getSentiment(result)+";"+text;
+            Sentiment sentiment = new Sentiment(text);
+            Sentiment.SentimentResultModel sentimentModel = sentiment.getSentimentModel();
+            System.out.println("Sentiment Score: " + sentimentModel.getPercentage());
+            System.out.println("Sentiment Type: " + sentimentModel.getSentimentType());
+            return sentiment.getSentiment()+";"+text;
         });
         map.print();
 

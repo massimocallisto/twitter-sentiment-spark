@@ -8,15 +8,15 @@ public class SentimentTest extends TestCase {
 
     public void testAnalyze() {
         String text = "I'm vary tired";
-        new Sentiment().analyze(text);
+        new Sentiment(text);
         Assert.assertTrue(true);
 
     }
 
     public void testGetSentiment() {
         String text = "I'm vary tired";
-        SentimentResult result = new Sentiment().analyze(text);
-        System.out.println(Sentiment.getSentiment(result));
+        Sentiment sentiment = new Sentiment(text);
+        System.out.println(sentiment.getSentiment());
         Assert.assertTrue(true);
     }
 }

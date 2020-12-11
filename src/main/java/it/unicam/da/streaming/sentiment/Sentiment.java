@@ -82,5 +82,15 @@ public class Sentiment {
         return sm;
     }
 
+    public static String[] getSentimentTypes(){
+        return new String[]{
+                "VeryPositive",
+                "Positive",
+                "Neutral",
+                "Negative",
+                "VeryNegative"
+        };
+    }
+
 
     }

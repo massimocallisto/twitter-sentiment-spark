@@ -34,19 +34,9 @@ public class AppTwitterReduceKeyWindow
         // can use them to generate OAuth credentials
         // https://github.com/apache/bahir/blob/master/streaming-twitter/examples/src/main/java/org/apache/spark/examples/streaming/twitter/JavaTwitterHashTagJoinSentiments.java
 
-        System.setProperty("twitter4j.oauth.consumerKey", System.getProperty("consumerKey", ""));
-        System.setProperty("twitter4j.oauth.consumerSecret", System.getProperty("consumerSecret", ""));
-        System.setProperty("twitter4j.oauth.accessToken", System.getProperty("accessToken", ""));
-        System.setProperty("twitter4j.oauth.accessTokenSecret", System.getProperty("accessTokenSecret", ""));
-
-        System.out.println("*** TWITTER ACCESS Information");
-        System.out.println("twitter4j.oauth.consumerKey           "+ System.getProperty("consumerKey", ""));
-        System.out.println("twitter4j.oauth.consumerSecret        "+ System.getProperty("consumerSecret", ""));
-        System.out.println("twitter4j.oauth.accessToken           "+ System.getProperty("accessToken", ""));
-        System.out.println("twitter4j.oauth.accessTokenSecret     "+ System.getProperty("accessTokenSecret", ""));
-
-
+        AppTwitter.initParams();
         System.out.println( "Hello World Twitter!" );
+
         SparkConf sparkConf = new SparkConf()
                 .setAppName("JavaTwitterHashTagJoinSentiments")
                 .setAppName("JavaTwitterHashTagJoinSentiments");

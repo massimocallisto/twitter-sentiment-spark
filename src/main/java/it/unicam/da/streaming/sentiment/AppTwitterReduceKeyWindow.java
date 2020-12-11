@@ -33,10 +33,18 @@ public class AppTwitterReduceKeyWindow
         // Set the system properties so that Twitter4j library used by Twitter stream
         // can use them to generate OAuth credentials
         // https://github.com/apache/bahir/blob/master/streaming-twitter/examples/src/main/java/org/apache/spark/examples/streaming/twitter/JavaTwitterHashTagJoinSentiments.java
-        System.setProperty("twitter4j.oauth.consumerKey", "cWV5fXGslcBph3tHHT52QaRGe");
-        System.setProperty("twitter4j.oauth.consumerSecret", "z9r1YXRHJvze8e0oXwGiE2Oi6T6v9PcIZgDx4qqTb3cqwm3vsB");
-        System.setProperty("twitter4j.oauth.accessToken", "11067472-Br433xWyFySLuMNyZQfC1oapOBVxlrHRgC864L8ef");
-        System.setProperty("twitter4j.oauth.accessTokenSecret", "Z2gst5zkU0r4Mddn6uaEt8hn0PrHoWZsJKgMuXMEPUG4O");
+
+        System.setProperty("twitter4j.oauth.consumerKey", System.getProperty("consumerKey", ""));
+        System.setProperty("twitter4j.oauth.consumerSecret", System.getProperty("consumerSecret", ""));
+        System.setProperty("twitter4j.oauth.accessToken", System.getProperty("accessToken", ""));
+        System.setProperty("twitter4j.oauth.accessTokenSecret", System.getProperty("accessTokenSecret", ""));
+
+        System.out.println("*** TWITTER ACCESS Information");
+        System.out.println("twitter4j.oauth.consumerKey           "+ System.getProperty("consumerKey", ""));
+        System.out.println("twitter4j.oauth.consumerSecret        "+ System.getProperty("consumerSecret", ""));
+        System.out.println("twitter4j.oauth.accessToken           "+ System.getProperty("accessToken", ""));
+        System.out.println("twitter4j.oauth.accessTokenSecret     "+ System.getProperty("accessTokenSecret", ""));
+
 
         System.out.println( "Hello World Twitter!" );
         SparkConf sparkConf = new SparkConf()

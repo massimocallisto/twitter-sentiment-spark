@@ -44,9 +44,9 @@ public class AppMongo
         System.out.println( "Sentiment to Mongo!" );
         SparkConf sparkConf = new SparkConf()
                 .setAppName("JavaTwitterHashTagJoinSentiments")
-                .set("spark.mongodb.input.uri", "mongodb://127.0.0.1/local")
-                .set("spark.mongodb.output.uri", "mongodb://127.0.0.1/local")
-                .setMaster("local[2]");
+                .set("spark.mongodb.input.uri", "mongodb://192.168.17.85:27017/sentiment")
+                .set("spark.mongodb.output.uri", "mongodb://192.168.17.85:27017/sentiment")
+                .setMaster("local[4]");
 
 
         // https://github.com/apache/bahir/blob/master/streaming-mqtt/examples/src/main/scala/org/apache/spark/examples/streaming/mqtt/MQTTWordCount.scala
@@ -59,8 +59,8 @@ public class AppMongo
 
         final JavaReceiverInputDStream<String> stream = MQTTUtils.createStream(
                 jssc,
-                "tcp://test.mosquitto.org:1883",
-                "wago/pfc/cloudconnectivity/example/mqttpublishark237",
+                "tcp://127.0.0.1:1883",
+                "atopic",
                 StorageLevel.MEMORY_ONLY_2());
 
 

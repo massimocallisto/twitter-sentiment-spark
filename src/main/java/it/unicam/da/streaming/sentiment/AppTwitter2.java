@@ -49,8 +49,8 @@ public class AppTwitter2
 
         SparkConf sparkConf = new SparkConf()
                 .setAppName("JavaTwitterHashTagJoinSentiments")
-                .set("spark.mongodb.input.uri", "mongodb://192.168.17.85/local")
-                .set("spark.mongodb.output.uri", "mongodb://192.168.17.85/local")
+                .set("spark.mongodb.input.uri", "mongodb://192.168.17.85:27017/sentiment")
+                .set("spark.mongodb.output.uri", "mongodb://192.168.17.85:27017/sentiment")
                 .setAppName("JavaTwitterHashTagJoinSentiments");
         sparkConf.setMaster("local[2]");
 
@@ -60,8 +60,8 @@ public class AppTwitter2
         jssc.sparkContext().setLogLevel("ERROR");
 
         FilterQuery filters = new FilterQuery()
-                .language("en")
-                .track("covid");
+                .language("it")
+                .track("draghi");
         JavaReceiverInputDStream<Status> stream = TwitterUtils.createFilteredStream(jssc, null, filters, StorageLevel.MEMORY_AND_DISK_SER_2());
         //JavaReceiverInputDStream<Status> stream = TwitterUtils.createStream(jssc);//, new String[]{});
 

@@ -13,6 +13,7 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.mqtt.MQTTUtils;
 import org.apache.spark.streaming.twitter.TwitterUtils;
 import scala.Tuple2;
+import twitter4j.FilterQuery;
 import twitter4j.Status;
 
 import java.util.Arrays;
@@ -36,13 +37,22 @@ public class AppTwitter
         System.out.println( "Hello World Twitter!" );
 
         SparkConf sparkConf = new SparkConf().setAppName("JavaTwitterHashTagJoinSentiments");
-        sparkConf.setMaster("local[2]");
+        sparkConf.setMaster("local[*]");
 
 
         // https://github.com/apache/bahir/blob/master/streaming-mqtt/examples/src/main/scala/org/apache/spark/examples/streaming/mqtt/MQTTWordCount.scala
         JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(5000));
         jssc.sparkContext().setLogLevel("ERROR");
-        JavaReceiverInputDStream<Status> stream = TwitterUtils.createStream(jssc);//, new String[]{});
+
+        FilterQuery filters = new FilterQuery()
+                .language("en")
+                .track("covid");
+        JavaReceiverInputDStream<Status> stream = TwitterUtils.createFilteredStream(jssc, null, filters, StorageLevel.MEMORY_AND_DISK_SER_2());
+        //JavaReceiverInputDStream<Status> stream = TwitterUtils.createStream(jssc);//, new String[]{});
+
+
+
+        //JavaReceiverInputDStream<Status> stream = TwitterUtils.createStream(jssc);//, new String[]{});
         JavaDStream<String> words = stream.flatMap(new FlatMapFunction<Status, String>() {
             @Override
             public Iterator<String> call(Status s) {
@@ -155,10 +165,10 @@ public class AppTwitter
     }
 
     public static void initParams(){
-        System.setProperty("twitter4j.oauth.consumerKey", System.getProperty("consumerKey", ""));
-        System.setProperty("twitter4j.oauth.consumerSecret", System.getProperty("consumerSecret", ""));
-        System.setProperty("twitter4j.oauth.accessToken", System.getProperty("accessToken", ""));
-        System.setProperty("twitter4j.oauth.accessTokenSecret", System.getProperty("accessTokenSecret", ""));
+        System.setProperty("twitter4j.oauth.consumerKey", System.getProperty("consumerKey", "a"));
+        System.setProperty("twitter4j.oauth.consumerSecret", System.getProperty("consumerSecret", "b"));
+        System.setProperty("twitter4j.oauth.accessToken", System.getProperty("accessToken", "c"));
+        System.setProperty("twitter4j.oauth.accessTokenSecret", System.getProperty("accessTokenSecret", "ds"));
 
         System.out.println("*** TWITTER ACCESS Information");
         System.out.println("twitter4j.oauth.consumerKey           "+ System.getProperty("consumerKey", ""));

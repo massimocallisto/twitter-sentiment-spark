@@ -38,7 +38,8 @@ public class App
         JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(5000));
         final JavaReceiverInputDStream<String> stream = MQTTUtils.createStream(
                 jssc,
-                "tcp://test.mosquitto.org:1883", //"tcp://bthermalappliance.westeurope.cloudapp.azure.com:1883",
+                //"tcp://test.mosquitto.org:1883", //"tcp://bthermalappliance.westeurope.cloudapp.azure.com:1883",
+                "tcp://localhost:1883", //"tcp://bthermalappliance.westeurope.cloudapp.azure.com:1883",
                 "#",
                 StorageLevel.MEMORY_ONLY_2()/*,
                 "user",
